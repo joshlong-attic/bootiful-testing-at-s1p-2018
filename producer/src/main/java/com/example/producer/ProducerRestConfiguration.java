@@ -1,8 +1,7 @@
 package com.example.producer;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.ServerResponse;
 
@@ -10,10 +9,15 @@ import static org.springframework.web.reactive.function.server.RequestPredicates
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
 import static org.springframework.web.reactive.function.server.ServerResponse.ok;
 
-@SpringBootApplication
-public class ProducerApplication {
+/**
+	* @author <a href="mailto:josh@joshlong.com">Josh Long</a>
+	*/
+@Configuration
+public class ProducerRestConfiguration {
 
-	public static void main(String[] args) {
-		SpringApplication.run(ProducerApplication.class, args);
+	@Bean
+	RouterFunction<ServerResponse> routes(ReservationRepository rr) {
+		return route(GET("/reservations"), serverRequest -> ok().body(rr.findAll(), Reservation.class));
 	}
+
 }

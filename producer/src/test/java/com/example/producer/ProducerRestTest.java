@@ -6,6 +6,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.reactive.server.WebTestClient;
@@ -17,6 +18,7 @@ import java.util.UUID;
 	* @author <a href="mailto:josh@joshlong.com">Josh Long</a>
 	*/
 @RunWith(SpringRunner.class)
+@Import(ProducerRestConfiguration.class)
 @WebFluxTest
 public class ProducerRestTest {
 
@@ -29,9 +31,10 @@ public class ProducerRestTest {
 	@Test
 	public void getAllReservations() {
 
-		Mockito.when(this.reservationRepository.findAll())
+		Mockito
+			.when(this.reservationRepository.findAll())
 			.thenReturn(Flux.just(new Reservation(UUID.randomUUID().toString(), "MARIO")));
-		
+
 		this.webTestClient
 			.get()
 			.uri("/reservations")

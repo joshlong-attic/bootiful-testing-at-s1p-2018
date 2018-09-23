@@ -13,22 +13,22 @@ import reactor.test.StepVerifier;
 @DataMongoTest
 public class ProducerRepositoryTest {
 
-    @Autowired
-    ReservationRepository repository;
+	@Autowired
+	ReservationRepository repository;
 
-    private final Reservation first = new Reservation( null, "MARIO");
-    private final Reservation second = new Reservation( null, "JOSH");
+	private final Reservation first = new Reservation(null, "MARIO");
+	private final Reservation second = new Reservation(null, "JOSH");
 
-    @Test
-    public void testShouldRepoFindAll() {
+	@Test
+	public void testShouldRepoFindAll() {
 
-        Publisher<Reservation> composedFlux =
-            Flux.just(first, second)
-                .flatMap(repository::save)
-                .thenMany(repository.findByName(first.getName()));
+		Publisher<Reservation> composedFlux =
+			Flux.just(first, second)
+				.flatMap(repository::save)
+				.thenMany(repository.findByName(first.getName()));
 
-        StepVerifier.create(composedFlux)
-                .expectNext(first)
-                .verifyComplete();
-    }
+		StepVerifier.create(composedFlux)
+			.expectNext(first)
+			.verifyComplete();
+	}
 }

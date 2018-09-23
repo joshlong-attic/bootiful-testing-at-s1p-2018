@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Reservation {
-    String id;
-    String reservationName;
+	private String id;
+	private String name;
 }
