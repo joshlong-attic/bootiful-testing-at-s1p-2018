@@ -14,22 +14,22 @@ import reactor.test.StepVerifier;
 @DataMongoTest
 public class ProducerDocumentTests {
 
-    @Autowired
-    ReactiveMongoTemplate template;
+	private final Reservation first = new Reservation(null, "MARIO");
+	private final Reservation second = new Reservation(null, "JOSH");
 
-    private final Reservation first = new Reservation( null, "MARIO");
-    private final Reservation second = new Reservation( null, "JOSH");
+	@Autowired
+	ReactiveMongoTemplate template;
 
-    @Test
-    public void testShouldDocumentStoreRetrieve() {
-        StepVerifier.create(
-                Flux.just(first, second)
-                        .flatMap(template::save)
-        )
-                .expectNext(first)
-                .expectNext(second)
-                .verifyComplete();
-    }
+	@Test
+	public void testShouldDocumentStoreRetrieve() {
+		StepVerifier.create(
+			Flux.just(first, second)
+				.flatMap(template::save)
+		)
+			.expectNext(first)
+			.expectNext(second)
+			.verifyComplete();
+	}
 
 
 }
