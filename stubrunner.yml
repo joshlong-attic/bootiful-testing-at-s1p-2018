@@ -1,0 +1,4 @@
+stubrunner:
+  stubsMode: LOCAL
+  ids:
+    - com.example:producer:+:8080
