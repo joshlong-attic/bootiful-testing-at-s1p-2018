@@ -17,6 +17,10 @@ public class ProducerPojoTests {
 		Assert.assertEquals(reservation.getId(), "1");
 		Assert.assertEquals(reservation.getName(), "mario");
 
+		Assert.assertThat(reservation, Matchers.allOf(
+				Matchers.notNullValue()
+		));
+
 		Assert.assertThat(reservation.getId(), Matchers.notNullValue());
 		Assert.assertThat(reservation.getName(), Matchers.equalToIgnoringCase("mario"));
 
@@ -27,7 +31,6 @@ public class ProducerPojoTests {
 
 		Assertions.assertThat(reservation.getName())
 				.as("Has a name")
-				.isNotNull()
 				.isNotBlank()
 				.isEqualTo("mario");
 	}
