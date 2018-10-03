@@ -12,39 +12,43 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
 
-import java.util.UUID;
-
 /**
 	* @author <a href="mailto:josh@joshlong.com">Josh Long</a>
 	*/
-@RunWith(SpringRunner.class)
-@Import(ProducerRestConfiguration.class)
+
 @WebFluxTest
-public class ProducerRestTest {
+@RunWith(SpringRunner.class)
+@Import(ReservationRestConfiguration.class)
+public class ReservationRestTest {
 
 	@Autowired
-	private WebTestClient webTestClient;
+	private WebTestClient client;
 
 	@MockBean
 	private ReservationRepository reservationRepository;
 
+	private final Reservation one = new Reservation("1", "Elsa");
+	private final Reservation two = new Reservation("2", "Pablo");
+
 	@Test
-	public void getAllReservations() {
+	public void getAllReservations() throws Exception {
 
 		Mockito
 			.when(this.reservationRepository.findAll())
-			.thenReturn(Flux.just(new Reservation(UUID.randomUUID().toString(), "MARIO")));
+			.thenReturn(Flux.just(this.one, this.two));
 
-		this.webTestClient
+		this.client
 			.get()
-			.uri("/reservations")
+			.uri("http://localhost:8080/reservations")
 			.exchange()
 			.expectStatus().isOk()
 			.expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
 			.expectBody()
-			.jsonPath("@.[0].name").isEqualTo("MARIO");
+			.jsonPath("@.[0].id").isEqualTo("1")
+			.jsonPath("@.[0].reservationName").isEqualTo("Elsa");
 
 
 	}
+
 
 }

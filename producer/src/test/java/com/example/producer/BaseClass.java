@@ -14,10 +14,12 @@ import reactor.core.publisher.Flux;
 /**
 	* @author <a href="mailto:josh@joshlong.com">Josh Long</a>
 	*/
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-	properties = "server.port=0")
 @RunWith(SpringRunner.class)
-@Import(ProducerRestConfiguration.class)
+@Import(ReservationRestConfiguration.class)
+@SpringBootTest(
+	webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
+	properties = "server.port=0"
+)
 public class BaseClass {
 
 	@LocalServerPort
@@ -26,15 +28,19 @@ public class BaseClass {
 	@MockBean
 	private ReservationRepository reservationRepository;
 
-	@Before
-	public void before() throws Exception {
+	private final Reservation one = new Reservation("1", "Ai");
+	private final Reservation two = new Reservation("2", "Zhang Wei");
 
-		RestAssured.baseURI = "http://localhost:" + this.port ;
+	@Before
+	public void init() throws Exception {
+
+		RestAssured.baseURI = "http://localhost:" + this.port;
 
 		Mockito
 			.when(this.reservationRepository.findAll())
-			.thenReturn(Flux.just(new Reservation("1", "A"), new Reservation("2", "B")));
+			.thenReturn(Flux.just(this.one, this.two));
 
 	}
+
 
 }
